@@ -3,10 +3,13 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-# Garantiza que el directorio donde se encuentra app.py esté en el sys.path de Python
+# Añade la ruta base y la carpeta del módulo explícitamente al path de Python
 ROOT_DIR = Path(__file__).resolve().parent
-if str(ROOT_DIR) not in sys.path:
-    sys.path.insert(0, str(ROOT_DIR))
+SUB_DIR = ROOT_DIR / "menfa_pig_mfl_v0_2"
+
+for p in [str(ROOT_DIR), str(SUB_DIR)]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
 
 import json
 import numpy as np
@@ -14,13 +17,18 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-# Importación robusta compatible con Streamlit Cloud y ejecución local
+# Importación directa e independiente de la estructura de contenedores remotos
 try:
     from core.engine import simulate_mfl, detect_indications, build_pipe_figure
     from data.database import DEFAULT_DB, initialize, save_run, list_runs
 except ModuleNotFoundError:
-    from menfa_pig_mfl_v0_2.core.engine import simulate_mfl, detect_indications, build_pipe_figure
-    from menfa_pig_mfl_v0_2.data.database import DEFAULT_DB, initialize, save_run, list_runs
+    try:
+        from menfa_pig_mfl_v0_2.core.engine import simulate_mfl, detect_indications, build_pipe_figure
+        from menfa_pig_mfl_v0_2.data.database import DEFAULT_DB, initialize, save_run, list_runs
+    except ModuleNotFoundError:
+        # Última alternativa buscando de manera relativa interna
+        from .core.engine import simulate_mfl, detect_indications, build_pipe_figure
+        from .data.database import DEFAULT_DB, initialize, save_run, list_runs
 
 st.set_page_config(page_title="MENFA PIG MFL · Suite avanzada", page_icon="🛢️", layout="wide")
 

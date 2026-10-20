@@ -14,8 +14,13 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-from core.engine import simulate_mfl, detect_indications, build_pipe_figure
-from data.database import DEFAULT_DB, initialize, save_run, list_runs
+# Importación robusta compatible con Streamlit Cloud y ejecución local
+try:
+    from core.engine import simulate_mfl, detect_indications, build_pipe_figure
+    from data.database import DEFAULT_DB, initialize, save_run, list_runs
+except ModuleNotFoundError:
+    from menfa_pig_mfl_v0_2.core.engine import simulate_mfl, detect_indications, build_pipe_figure
+    from menfa_pig_mfl_v0_2.data.database import DEFAULT_DB, initialize, save_run, list_runs
 
 st.set_page_config(page_title="MENFA PIG MFL · Suite avanzada", page_icon="🛢️", layout="wide")
 

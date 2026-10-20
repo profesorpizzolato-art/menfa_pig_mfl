@@ -1,6 +1,14 @@
 from __future__ import annotations
-import json
+
+import sys
 from pathlib import Path
+
+# Garantiza que el directorio donde se encuentra app.py esté en el sys.path de Python
+ROOT_DIR = Path(__file__).resolve().parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+import json
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
